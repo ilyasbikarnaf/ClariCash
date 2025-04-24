@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`w-screen h-screen ${montserrat.className} overflow-y-hidden md:overflow-y-scroll relative `}
+        className={`w-screen h-screen ${montserrat.className} overflow-y-hidden md:overflow-y-scroll relative`}
       >
         <ImageComponent
           dimensions={243}
@@ -42,7 +42,7 @@ export default function RootLayout({
         />
         <ImageComponent
           dimensions={418}
-          src={TopWaveMobile}
+          src={TopWave}
           className="absolute top-0 right-0 hidden md:inline"
         />
         <ImageComponent
@@ -51,7 +51,7 @@ export default function RootLayout({
           className="absolute bottom-0 left-0 hidden md:inline"
         />
 
-        <main className="mx-auto max-w-md md:max-w-2xl h-[90vh] pt-[5vh] rounded-md p-2 ">
+        <main className="mx-auto max-w-md md:max-w-2xl h-[90vh] pt-[5vh] rounded-md p-2">
           {children}
         </main>
       </body>

@@ -11,6 +11,8 @@ import {
 } from "chart.js";
 
 const options = {
+  maintainAspectRatio: false,
+  responsive: true,
   plugins: {
     legend: {
       align: "start",
@@ -73,5 +75,5 @@ ChartJS.register(
 );
 
 export default function LinearChart() {
-  return <Line data={data} options={options} />;
+  return <Line data={data} options={options} className="h-full" />;
 }

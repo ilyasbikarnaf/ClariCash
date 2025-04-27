@@ -28,30 +28,36 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`w-screen h-screen ${montserrat.className} overflow-y-hidden md:overflow-y-scroll relative`}
+        className={`w-screen min-h-screen relative ${montserrat.className} `}
       >
         <ImageComponent
           dimensions={243}
           src={TopWaveMobile}
-          className="absolute top-0 right-0 md:hidden -z-10"
+          className="fixed top-0 right-0 lg:hidden -z-10"
         />
         <ImageComponent
           dimensions={243}
           src={BottomWaveMobile}
-          className="absolute bottom-0 left-0 md:hidden -z-10"
+          className="fixed bottom-0 left-0 lg:hidden -z-10"
         />
         <ImageComponent
           dimensions={418}
           src={TopWave}
-          className="absolute top-0 right-0 hidden md:inline"
+          className="fixed top-0 right-0 hidden lg:inline -z-10"
         />
         <ImageComponent
           dimensions={418}
           src={BottomWave}
-          className="absolute bottom-0 left-0 hidden md:inline"
+          className="fixed bottom-0 left-0 hidden lg:inline -z-10"
         />
 
-        <main className="mx-auto max-w-md md:max-w-2xl h-[90vh] pt-[5vh] rounded-md p-2">
+        <main className="mx-auto max-w-md lg:max-w-2xl min-h-[90vh] pt-[5vh] rounded-md p-2">
+          <div className="lg:flex lg:flex-col lg:gap-y-2 hidden text-center my-10">
+            <h2 className="text-3xl">
+              <span className="font-semibold">Good morning,</span> Jane Doe
+            </h2>
+            <p className="text-xl">Welcome Back</p>
+          </div>
           {children}
         </main>
       </body>

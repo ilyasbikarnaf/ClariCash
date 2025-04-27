@@ -35,5 +35,5 @@ const data = {
 };
 
 export default function CircularChart() {
-  return <Doughnut data={data} options={options} />;
+  return <Doughnut className="p-4 w-full" data={data} options={options} />;
 }

@@ -4,8 +4,8 @@ const array = new Array(30).fill(0).map((_, i) => i + 1);
 
 export default function DateTable() {
   return (
-    <div className="flex flex-1 flex-col gap-y-3 p-3 bg-[#181818]/90 lg:p-6 rounded-xl lg:w-[300px]">
-      <div className="flex justify-between items-center ">
+    <div className="flex flex-1 flex-col gap-y-3 p-3 bg-[#181818]/90 lg:p-6 rounded-2xl lg:w-[300px]">
+      <div className="flex justify-between items-center">
         <div className="px-2 py-1 hover:bg-[#212121] rounded">
           <MoveLeftIcon
             size={20}

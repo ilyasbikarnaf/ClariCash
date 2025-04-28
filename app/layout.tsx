@@ -51,13 +51,7 @@ export default function RootLayout({
           className="fixed bottom-0 left-0 hidden lg:inline -z-10"
         />
 
-        <main className="mx-auto max-w-md lg:max-w-2xl min-h-[90vh] pt-[5vh] rounded-md p-2">
-          <div className="lg:flex lg:flex-col lg:gap-y-2 hidden text-center my-10">
-            <h2 className="text-3xl">
-              <span className="font-semibold">Good morning,</span> Jane Doe
-            </h2>
-            <p className="text-xl">Welcome Back</p>
-          </div>
+        <main className="mx-auto max-w-md lg:max-w-2xl min-h-[90vh] pt-[5vh] md:pt-0 rounded-md p-2">
           {children}
         </main>
       </body>

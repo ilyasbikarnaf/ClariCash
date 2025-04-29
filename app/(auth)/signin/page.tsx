@@ -1,5 +1,6 @@
 "use client";
 
+import { signin } from "@/app/actions/auth";
 import FormInput from "@/components/FormInput";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { SigninSchema } from "@/lib/zodAuthSchema";
@@ -8,9 +9,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { startTransition, useTransition } from "react";
+import { startTransition, useActionState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { z } from "zod";
+
+const initialState = {
+  success: false,
+  message: "",
+};
 
 export default function Signin() {
   const {
@@ -21,31 +28,38 @@ export default function Signin() {
     resolver: zodResolver(SigninSchema),
   });
 
-  // const { signIn, setActive } = useSignIn();
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  // function onSubmit(data: { password: string; email: string }) {
-  //   startTransition(async () => {
-  //     //login functionality
-  //     //   try {
-  //     //     const clerkSinginResult = await signIn?.create({
-  //     //       strategy: "password",
-  //     //       password: data.password,
-  //     //       identifier: data.email,
-  //     //     });
-  //     //     if (setActive && clerkSinginResult?.status === "complete") {
-  //     //       setActive({ session: clerkSinginResult.createdSessionId });
-  //     //     }
-  //     //     toast.success("Login successful. Let's get to work!");
-  //     //     router.push("/tasks");
-  //     //   } catch {
-  //     //     toast.error("Invalid email or password. Please try again.");
-  //     //   }
-  //     // });
-  //   });
+  const [state, formAction, isPending] = useActionState(
+    async (prevData, formData: FormData) => {
+      try {
+        const result = await signin(formData);
 
-  console.log(2);
+        if (!result.success) {
+          toast.error(result.message);
+          return null;
+        }
+
+        toast.success(result.message);
+        router.push("/");
+      } catch (err) {
+        console.log(err);
+        toast.error("An unexpected error occured");
+        return null;
+      }
+    },
+    initialState
+  );
+
+  function onSubmit(data: z.output<typeof SigninSchema>) {
+    const formData = new FormData();
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+
+    startTransition(async () => {
+      formAction(formData);
+    });
+  }
 
   return (
     <div className="flex flex-col md:justify-center mt-10 min-h-screen  sm:px-6 lg:px-8 ">
@@ -58,7 +72,7 @@ export default function Signin() {
 
       <form
         className="flex flex-col sm:mx-auto sm:max-w-md sm:w-full bg-[#1A1A1A] p-8 border-1 border-[#444444]/30   rounded space-y-7"
-        // onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <FormInput
           errors={errors}

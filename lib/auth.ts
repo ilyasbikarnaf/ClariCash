@@ -1,6 +1,7 @@
 import * as jose from "jose";
 import { compare, hash } from "bcrypt";
 import { cookies } from "next/headers";
+import { User } from "@/db/schema";
 
 type JWTPayload = {
   userId: string;
@@ -92,4 +93,17 @@ export async function getSession() {
 export async function deleteSession() {
   const cookieStore = await cookies();
   cookieStore.delete("auth_token");
+}
+
+export async function createUser(email: string, password: string) {
+  const hashedPassword = await hashPassword(password);
+
+  try {
+    const user = await User.create({ email, password: hashedPassword });
+
+    return { id: user._id.toString() };
+  } catch (err) {
+    console.log("Error creating user", err);
+    return null;
+  }
 }

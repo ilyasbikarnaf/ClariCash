@@ -1,12 +1,17 @@
 "use client";
 
 import CircularChart from "@/components/CircularChart";
+import CreateTransactionModal from "@/components/CreateTransactionModal";
 import DateTable from "@/components/DateTable";
 import DialogComponent from "@/components/DialogComponent";
 import LinearChart from "@/components/LinearChart";
 import { Eye, Plus } from "lucide-react";
+import { useState } from "react";
 
 export default function RootPage() {
+  const [month, setMonth] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
   return (
     <>
       <div className="lg:flex lg:flex-col lg:gap-y-2 hidden text-center my-10">
@@ -26,7 +31,12 @@ export default function RootPage() {
         </div>
 
         <div className="flex gap-3 lg:gap-y-5 lg:flex-col lg:grid lg:col-start-2 lg:col-end-3 lg:row-span-2">
-          <DateTable />
+          <DateTable
+            month={month}
+            setMonth={setMonth}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+          />
           <div className="bg-[#181818]/80 rounded-2xl backdrop-blur-xs w-[200px] place-content-center lg:w-full lg:p-2">
             <CircularChart />
           </div>
@@ -51,10 +61,12 @@ export default function RootPage() {
                   <span className="text-sm font-semibold">View All</span>
                 </>
               </DialogComponent>
-              {/* </button> */}
-              <DialogComponent classes="px-1.5 py-1 bg-purple-700 rounded hover:cursor-pointer hover:bg-purple-800 transition-all text-white h-7">
+              <CreateTransactionModal
+                selectedDate={selectedDate}
+                classes="px-1.5 py-1 bg-purple-700 rounded hover:cursor-pointer hover:bg-purple-800 transition-all text-white h-7"
+              >
                 <Plus size={20} />
-              </DialogComponent>
+              </CreateTransactionModal>
             </div>
           </div>
 

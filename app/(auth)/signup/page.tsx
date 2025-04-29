@@ -1,10 +1,9 @@
 "use client";
 
-// import { createUserAccount } from "@/app/actions/auth";
+import { signup } from "@/app/actions/auth";
 import FormInput from "@/components/FormInput";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { SignupSchema } from "@/lib/zodAuthSchema";
-// import { useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import Link from "next/link";
@@ -28,35 +27,27 @@ export default function Signup() {
     resolver: zodResolver(SignupSchema),
   });
 
-  // const { signIn, setActive } = useSignIn();
   const router = useRouter();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [state, formAction, isPending] = useActionState(
     async (prevData, data: FormData) => {
-      //signup logic
+      try {
+        const result = await signup(data);
+
+        if (!result.success) {
+          toast.error(result.message);
+          return null;
+        }
+
+        toast.success(result.message);
+        router.push("/");
+      } catch (err) {
+        console.log(err);
+        toast.error("An unexpected error occured");
+        return null;
+      }
     },
-    //   {
-    //   const result = await createUserAccount(data);
-
-    //   if (!result.success) {
-    //     toast.error(result.message);
-    //     return null;
-    //   }
-
-    //   const clerkSinginResult = await signIn?.create({
-    //     strategy: "password",
-    //     password: data.get("password") as string,
-    //     identifier: data.get("email") as string,
-    //   });
-
-    //   if (setActive && clerkSinginResult?.status === "complete") {
-    //     await setActive({ session: clerkSinginResult.createdSessionId });
-    //   }
-
-    //   toast.success(result.message);
-    //   router.push("/tasks");
-    // }
     initialState
   );
 

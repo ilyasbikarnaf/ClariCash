@@ -9,7 +9,7 @@ import {
   verifyPassword,
 } from "@/lib/auth";
 import { getUserByEmail } from "@/lib/dal";
-import { SigninSchema, SignupSchema } from "@/lib/zodAuthSchema";
+import { SigninSchema, SignupSchema } from "@/lib/zodSchemas";
 import { redirect } from "next/navigation";
 
 export type ActionResponse = {

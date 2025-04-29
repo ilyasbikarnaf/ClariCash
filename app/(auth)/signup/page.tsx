@@ -3,7 +3,7 @@
 import { signup } from "@/app/actions/auth";
 import FormInput from "@/components/FormInput";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { SignupSchema } from "@/lib/zodAuthSchema";
+import { SignupSchema } from "@/lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import Link from "next/link";

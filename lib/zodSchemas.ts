@@ -41,3 +41,15 @@ export const SigninSchema = z.object({
       message: "Password must not contain spaces",
     }),
 });
+
+export const TransactionSchema = z.object({
+  name: z.string().min(1, "name must at least have 1 character"),
+  amount: z
+    .number({
+      required_error: "Amount is required",
+      invalid_type_error: "Amount must be a number",
+    })
+    .positive(),
+  category: z.enum(["income", "expense"]),
+  date: z.date(),
+});

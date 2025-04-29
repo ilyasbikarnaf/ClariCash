@@ -3,7 +3,7 @@
 import { signin } from "@/app/actions/auth";
 import FormInput from "@/components/FormInput";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { SigninSchema } from "@/lib/zodAuthSchema";
+import { SigninSchema } from "@/lib/zodSchemas";
 // import { useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";

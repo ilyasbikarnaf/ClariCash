@@ -3,23 +3,30 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useActionState, useRef } from "react";
+import { useActionState, useMemo, useRef } from "react";
 import toast from "react-hot-toast";
 
 export default function CreateTransactionModal({
   children,
   classes,
   selectedDate,
+  onSuccess,
 }) {
   const trigerRef = useRef<HTMLButtonElement>(null);
+  const now = useMemo(() => {
+    const date = new Date(selectedDate);
+    date.setHours(new Date().getHours(), new Date().getMinutes(), 0, 0);
+    return new Date(date.getTime() - date.getTimezoneOffset() * 6e4)
+      .toISOString()
+      .slice(0, 16);
+  }, [selectedDate]);
+
   const [state, formAction, isPending] = useActionState(
     async (prevData, formData: FormData) => {
       try {
@@ -31,6 +38,7 @@ export default function CreateTransactionModal({
         }
 
         toast.success(transaction.message);
+        await onSuccess();
         trigerRef.current?.click();
       } catch (err) {
         console.log(err);
@@ -90,8 +98,8 @@ export default function CreateTransactionModal({
             <Input
               name="date"
               id="date"
-              defaultValue={selectedDate.toISOString().split("T")[0]}
-              type="date"
+              defaultValue={now}
+              type="datetime-local"
               className="col-span-3"
             />
           </div>

@@ -1,3 +1,4 @@
+import { connectToDatabase } from "@/db/db";
 import { Transaction, User } from "@/db/schema";
 import { getSession } from "./auth";
 import mongoose from "mongoose";
@@ -32,15 +33,5 @@ export async function getUserByEmail(email: string) {
   } catch (err) {
     console.log(err);
     return null;
-  }
-}
-
-export async function getAllTransactions() {
-  try {
-    const transactions = await Transaction.find({});
-
-    return transactions;
-  } catch (err) {
-    console.log(err);
   }
 }

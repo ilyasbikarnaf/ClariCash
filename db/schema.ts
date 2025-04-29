@@ -16,30 +16,33 @@ const UserSchema = new mongoose.Schema({
 
 export const User = mongoose.models.User || mongoose.model("User", UserSchema);
 
-const TransactionSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  amount: {
-    type: Number,
-    required: true,
-    min: [0, "Amount must be positive"],
-  },
-  category: {
-    type: String,
-    enum: {
-      values: ["income", "expense"],
-      message: "{VALUE} is not a valid category",
+const TransactionSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-    required: true,
-  },
+    amount: {
+      type: Number,
+      required: true,
+      min: [0, "Amount must be positive"],
+    },
+    category: {
+      type: String,
+      enum: {
+        values: ["income", "expense"],
+        message: "{VALUE} is not a valid category",
+      },
+      required: true,
+    },
 
-  date: {
-    type: Date,
-    required: true,
+    date: {
+      type: Date,
+      required: true,
+    },
   },
-});
+  { timestamps: true }
+);
 
 export const Transaction =
   mongoose.models.Transaction ||

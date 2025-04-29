@@ -5,6 +5,14 @@ import { TransactionSchema } from "@/lib/zodSchemas";
 import { ActionResponse } from "./auth";
 import { Transaction } from "@/db/schema";
 
+type TransactionType = {
+  name: string;
+  amount: number;
+  category: "income" | "expense";
+  date: Date;
+  createdAt: Date;
+};
+
 export async function createTransaction(
   formData: FormData
 ): Promise<ActionResponse> {
@@ -20,8 +28,6 @@ export async function createTransaction(
     const validatedData = TransactionSchema.safeParse(data);
 
     if (!validatedData.success) {
-      console.log(validatedData.error.errors);
-
       return {
         message: validatedData.error.errors
           .map((err) => err.message)
@@ -51,3 +57,36 @@ export async function createTransaction(
     return { message: "An unexpected error occured", success: false };
   }
 }
+
+export async function getAllTransactions() {
+  try {
+    await connectToDatabase();
+    const transactions = await Transaction.find({}, { _id: 0, __v: 0 })
+      .sort({
+        date: -1,
+        createdAt: -1,
+      })
+      .lean();
+
+    return transactions as TransactionType[];
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// export async function getLast5Transactions() {
+//   try {
+//     await connectToDatabase();
+
+//     const transactions = await Transaction.find({}, { _id: 0, __v: 0 })
+//       .sort({
+//         date: -1,
+//         createdAt: -1,
+//       })
+//       .lean();
+
+//     return transactions as TransactionType[];
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }

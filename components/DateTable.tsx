@@ -48,7 +48,9 @@ export default function DateTable({
             onClick={() => setMonth(subMonths(month, 1))}
           />
         </div>
-        <h3 className="text-xl font-bold">{format(month, "LLLL, y")}</h3>
+        <h3 className="text-lg md:text-xl font-bold">
+          {format(month, "LLLL, y")}
+        </h3>
 
         <div className="hover:cursor-pointer hover:bg-[#212121] rounded px-2 py-1">
           <MoveRightIcon
@@ -70,7 +72,7 @@ export default function DateTable({
           return (
             <div
               className={cn(
-                " hover:cursor-pointer rounded hover: p-1 w-full transition-all flex flex-col hover:bg-gray-600 items-center",
+                " hover:cursor-pointer rounded p-1 w-full transition-all flex flex-col hover:bg-gray-600 items-center",
                 !isSameMonth(day, month) && "opacity-60",
                 isSameDay(day, selectedDate) && "bg-blue-500 text-white",
                 isSameDay(day, today) &&

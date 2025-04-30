@@ -3,7 +3,7 @@
 import CircularChart from "@/components/CircularChart";
 import CreateTransactionModal from "@/components/CreateTransactionModal";
 import DateTable from "@/components/DateTable";
-import DialogComponent from "@/components/DialogComponent";
+import DialogComponent from "@/components/TableTransactionsModal";
 import LinearChart from "@/components/LinearChart";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -11,9 +11,10 @@ import { Eye, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { getAllTransactions } from "./actions/transaction";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, formatAbsoluteTime, formatRelativeTime } from "@/lib/utils";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import Last5Transactions from "@/components/transactions/Last5Transactions";
+import TableTransactionsModal from "@/components/TableTransactionsModal";
 
 export default function RootPage() {
   const [month, setMonth] = useState(new Date());
@@ -87,7 +88,17 @@ export default function RootPage() {
           <div className="flex justify-between items-center">
             <h4 className="font-semibold text-2xl">Last Transactions</h4>
             <div className="flex gap-2 items-center h-4">
-              <DialogComponent
+              <TableTransactionsModal
+                data={data?.map((transaction) => {
+                  let category = transaction.category;
+                  category = category[0].toUpperCase() + category.slice(1);
+
+                  return {
+                    ...transaction,
+                    category,
+                    date: formatAbsoluteTime(transaction.date),
+                  };
+                })}
                 classes={
                   "flex bg-purple-700 items-center gap-x-1 transition-all rounded px-2 py-1 hover:bg-purple-800 hover:cursor-pointer h-7 text-white"
                 }
@@ -96,7 +107,8 @@ export default function RootPage() {
                   <Eye size={16} />
                   <span className="text-sm font-semibold">View All</span>
                 </>
-              </DialogComponent>
+              </TableTransactionsModal>
+
               <CreateTransactionModal
                 onSuccess={() => {
                   queryClient.invalidateQueries(["transactions"]);

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useActionState, useMemo, useRef } from "react";
+import { useActionState, useRef } from "react";
 import toast from "react-hot-toast";
 
 export default function CreateTransactionModal({
@@ -19,13 +19,11 @@ export default function CreateTransactionModal({
   onSuccess,
 }) {
   const trigerRef = useRef<HTMLButtonElement>(null);
-  const now = useMemo(() => {
-    const date = new Date(selectedDate);
-    date.setHours(new Date().getHours(), new Date().getMinutes(), 0, 0);
-    return new Date(date.getTime() - date.getTimezoneOffset() * 6e4)
-      .toISOString()
-      .slice(0, 16);
-  }, [selectedDate]);
+  const date = new Date(selectedDate);
+  date.setHours(new Date().getHours(), new Date().getMinutes(), 0, 0);
+  const now = new Date(date.getTime() - date.getTimezoneOffset() * 6e4)
+    .toISOString()
+    .slice(0, 16);
 
   const [state, formAction, isPending] = useActionState(
     async (prevData, formData: FormData) => {
@@ -53,7 +51,7 @@ export default function CreateTransactionModal({
       <DialogTrigger asChild ref={trigerRef}>
         <Button className={classes}>{children}</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:-w-[425px]">
         <DialogHeader>
           <DialogTitle>All Transactions</DialogTitle>
           {/* <DialogDescription>

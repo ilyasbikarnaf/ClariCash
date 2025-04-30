@@ -13,7 +13,7 @@ import { getAllTransactions } from "./actions/transaction";
 import { format } from "date-fns";
 import { cn, formatAbsoluteTime, formatRelativeTime } from "@/lib/utils";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import Last5Transactions from "@/components/transactions/Last5Transactions";
+import Last5Transactions from "@/components/Last5Transactions";
 import TableTransactionsModal from "@/components/TableTransactionsModal";
 
 export default function RootPage() {

@@ -1,6 +1,6 @@
 import { getLast5Transactions } from "@/app/actions/transaction";
 import { useQuery } from "@tanstack/react-query";
-import { LoadingSpinner } from "../LoadingSpinner";
+import { LoadingSpinner } from "./LoadingSpinner";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 

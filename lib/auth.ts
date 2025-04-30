@@ -74,7 +74,6 @@ export async function getSession() {
 
     return payload ? { userId: payload.userId } : null;
   } catch (error) {
-    // Handle the specific prerendering error
     if (
       error instanceof Error &&
       error.message.includes("During prerendering, `cookies()` rejects")
@@ -101,7 +100,7 @@ export async function createUser(email: string, password: string) {
   try {
     const user = await User.create({ email, password: hashedPassword });
 
-    return { id: user._id.toString() };
+    return { _id: user._id };
   } catch (err) {
     console.log("Error creating user", err);
     return null;

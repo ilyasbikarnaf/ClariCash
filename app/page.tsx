@@ -15,6 +15,7 @@ import { cn, formatAbsoluteTime, formatRelativeTime } from "@/lib/utils";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import Last5Transactions from "@/components/Last5Transactions";
 import TableTransactionsModal from "@/components/TableTransactionsModal";
+import UserEmail from "@/components/UserEmail";
 
 export default function RootPage() {
   const [month, setMonth] = useState(new Date());
@@ -61,12 +62,7 @@ export default function RootPage() {
 
   return (
     <>
-      <div className="lg:flex lg:flex-col lg:gap-y-2 hidden text-center my-10">
-        <h2 className="text-3xl">
-          <span className="font-semibold">Good morning,</span> Jane Doe
-        </h2>
-        <p className="text-xl">Welcome Back</p>
-      </div>
+      <UserEmail />
 
       <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-[1fr_minmax(auto,200px)] lg:grid-rows-[250px_1fr] lg:gap-5">
         <div className="lg:hidden">

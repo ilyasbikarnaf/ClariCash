@@ -3,15 +3,23 @@
 import { connectToDatabase } from "@/db/db";
 import { TransactionSchema } from "@/lib/zodSchemas";
 import { ActionResponse } from "./auth";
-import { Transaction } from "@/db/schema";
+import { Transaction, User } from "@/db/schema";
 import { TransactionType } from "@/lib/types";
 import { isValidObjectId } from "mongoose";
+import { getCurrentUser } from "@/lib/dal";
 
 export async function createTransaction(
   formData: FormData
 ): Promise<ActionResponse> {
   try {
     await connectToDatabase();
+
+    const { id } = await getCurrentUser();
+    if (!id) {
+      console.log("no id provided");
+      return { message: "you must log in", success: false };
+    }
+
     const data = {
       name: formData.get("name") as string,
       amount: parseFloat(formData.get("amount") as string),
@@ -36,6 +44,7 @@ export async function createTransaction(
       amount,
       category,
       date,
+      userId: id.toString(),
     });
 
     if (!transaction) {
@@ -55,7 +64,14 @@ export async function createTransaction(
 export async function getAllTransactions() {
   try {
     await connectToDatabase();
-    const transactions = await Transaction.find({}, { __v: 0 })
+
+    const { id } = await getCurrentUser();
+    if (!id) {
+      console.log("no id provided");
+      return { message: "you must log in", success: false };
+    }
+
+    const transactions = await Transaction.find({ userId: id }, { __v: 0 })
       .sort({
         date: -1,
         createdAt: -1,
@@ -64,7 +80,7 @@ export async function getAllTransactions() {
 
     return transactions.map((transaction) => ({
       ...transaction,
-      _id: transaction._id.toString(), // ✅ Convert to string
+      _id: transaction._id.toString(),
     })) as TransactionType[];
   } catch (err) {
     console.log(err);
@@ -76,6 +92,7 @@ export async function deleteTransaction(
 ): Promise<ActionResponse> {
   try {
     await connectToDatabase();
+
     console.log(transactionId);
 
     if (!isValidObjectId(transactionId)) {

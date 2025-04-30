@@ -39,7 +39,7 @@ export async function signup(formData: FormData): Promise<ActionResponse> {
 
     const { email, password } = validatedData.data;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email }, { password: 0, __v: 0 });
     if (existingUser) {
       return {
         message: "User already exists",
@@ -53,7 +53,7 @@ export async function signup(formData: FormData): Promise<ActionResponse> {
       return { message: "failed to signup", success: false };
     }
 
-    await createSession(user.id);
+    await createSession(user._id.toString());
 
     return {
       message: "Account created succesfully",

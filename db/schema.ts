@@ -40,6 +40,10 @@ const TransactionSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    userId: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

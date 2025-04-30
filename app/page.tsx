@@ -3,7 +3,6 @@
 import CircularChart from "@/components/CircularChart";
 import CreateTransactionModal from "@/components/CreateTransactionModal";
 import DateTable from "@/components/DateTable";
-import DialogComponent from "@/components/TableTransactionsModal";
 import LinearChart from "@/components/LinearChart";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -12,10 +11,10 @@ import { useMemo, useState } from "react";
 import { getAllTransactions } from "./actions/transaction";
 import { format, isSameDay } from "date-fns";
 import { cn, formatAbsoluteTime, formatRelativeTime } from "@/lib/utils";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 import Last5Transactions from "@/components/Last5Transactions";
 import TableTransactionsModal from "@/components/TableTransactionsModal";
-import UserEmail from "@/components/UserEmail";
+
+import UserEmailWrapper from "@/components/UserEmailWrapper";
 
 export default function RootPage() {
   const [month, setMonth] = useState(new Date());
@@ -62,7 +61,7 @@ export default function RootPage() {
 
   return (
     <>
-      <UserEmail />
+      <UserEmailWrapper />
 
       <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-[1fr_minmax(auto,200px)] lg:grid-rows-[250px_1fr] lg:gap-5">
         <div className="lg:hidden">

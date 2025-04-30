@@ -9,15 +9,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import DeleteButton from "./DeleteButton";
 
 const columns = [
   { header: "Name", accessor: "name" },
   { header: "Category", accessor: "category" },
   { header: "Amount", accessor: "amount" },
   { header: "Transaction At", accessor: "date" },
+  { header: "Delete", accessor: "delete" },
 ];
 
-export default function TableComponent({ data, pageSize = 10 }) {
+export default function TableComponent({ data, onSuccess, pageSize = 10 }) {
   const [page, setPage] = useState(0);
   const pageCount = Math.ceil(data.length / pageSize);
 
@@ -43,23 +45,35 @@ export default function TableComponent({ data, pageSize = 10 }) {
             <TableRow key={rowIndex}>
               {columns.map((column, colIndex) => {
                 const isExpense = row["category"] === "Expense";
+                const isIncome = row["category"] === "Income";
 
-                const shouldHighlight = isExpense && column.accessor !== "name";
+                const shouldHighlightRed =
+                  isExpense && column.accessor !== "name";
+                const shouldHighlightGreen =
+                  isIncome && column.accessor !== "name";
 
                 const displayAmountFormat =
                   column.accessor === "amount" && `$${row[column.accessor]}`;
 
                 return (
                   <TableCell key={colIndex} className="hover:cursor-pointer">
-                    <div
-                      className={cn(
-                        "text-sm",
-                        shouldHighlight && "text-red-500",
-                        column.accessor === "date" && "hidden md:inline"
-                      )}
-                    >
-                      {String(displayAmountFormat || row[column.accessor])}
-                    </div>
+                    {column.accessor === "delete" ? (
+                      <DeleteButton
+                        onSuccess={onSuccess}
+                        transactionId={row._id}
+                      />
+                    ) : (
+                      <div
+                        className={cn(
+                          "text-sm",
+                          shouldHighlightRed && "text-red-500",
+                          shouldHighlightGreen && "text-green-500",
+                          column.accessor === "date" && "hidden md:inline"
+                        )}
+                      >
+                        {String(displayAmountFormat || row[column.accessor])}
+                      </div>
+                    )}
                   </TableCell>
                 );
               })}

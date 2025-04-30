@@ -4,14 +4,8 @@ import { connectToDatabase } from "@/db/db";
 import { TransactionSchema } from "@/lib/zodSchemas";
 import { ActionResponse } from "./auth";
 import { Transaction } from "@/db/schema";
-
-type TransactionType = {
-  name: string;
-  amount: number;
-  category: "income" | "expense";
-  date: Date;
-  createdAt: Date;
-};
+import { TransactionType } from "@/lib/types";
+import { isValidObjectId } from "mongoose";
 
 export async function createTransaction(
   formData: FormData
@@ -61,32 +55,46 @@ export async function createTransaction(
 export async function getAllTransactions() {
   try {
     await connectToDatabase();
-    const transactions = await Transaction.find({}, { _id: 0, __v: 0 })
+    const transactions = await Transaction.find({}, { __v: 0 })
       .sort({
         date: -1,
         createdAt: -1,
       })
       .lean();
 
-    return transactions as TransactionType[];
+    return transactions.map((transaction) => ({
+      ...transaction,
+      _id: transaction._id.toString(), // ✅ Convert to string
+    })) as TransactionType[];
   } catch (err) {
     console.log(err);
   }
 }
 
-// export async function getLast5Transactions() {
-//   try {
-//     await connectToDatabase();
+export async function deleteTransaction(
+  transactionId: string | number
+): Promise<ActionResponse> {
+  try {
+    await connectToDatabase();
+    console.log(transactionId);
 
-//     const transactions = await Transaction.find({}, { _id: 0, __v: 0 })
-//       .sort({
-//         date: -1,
-//         createdAt: -1,
-//       })
-//       .lean();
+    if (!isValidObjectId(transactionId)) {
+      return { message: "Invalid transaction ID", success: false };
+    }
 
-//     return transactions as TransactionType[];
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
+    const deleted = await Transaction.deleteOne({ _id: transactionId });
+
+    if (!deleted.deletedCount) {
+      return {
+        message: "Failed to delete the Transaction",
+        success: false,
+      };
+    }
+
+    return { message: "Transaction deleted Succesfully", success: true };
+  } catch (err) {
+    console.log(err);
+
+    return { message: "Failed to delete the Transaction", success: false };
+  }
+}

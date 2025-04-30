@@ -12,7 +12,7 @@ export default function Last5Transactions({ isPending, data }) {
       return (
         <div
           key={transaction.createdAt.toString()}
-          className="flex justify-between items-center"
+          className="flex justify-between items-center hover:opacity-90 hover:bg-purple-500 px-2 py-1 rounded hover:cursor-pointer transition-all"
         >
           <div>
             <h2 className="text-xl">{transaction.name}</h2>

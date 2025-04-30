@@ -1,3 +1,4 @@
+"use client";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,9 +10,26 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useMemo } from "react";
+import { TransactionType } from "@/lib/types";
+
+const TIME_LABELS = [
+  "00:00",
+  "03:00",
+  "06:00",
+  "09:00",
+  "12:00",
+  "15:00",
+  "18:00",
+  "21:00",
+];
 
 const options = {
   maintainAspectRatio: false,
+  interaction: {
+    mode: "index",
+    intersect: false,
+  },
   responsive: true,
   plugins: {
     legend: {
@@ -25,6 +43,16 @@ const options = {
         padding: 20,
       },
     },
+    tooltip: {
+      backgroundColor: "#",
+      callbacks: {
+        label: function (context) {
+          const label = context.dataset.label || "";
+          const value = context.parsed.y;
+          return `${label}: $${value.toLocaleString()}`; // Adds $ and formats to 2 decimal places
+        },
+      },
+    },
   },
   scales: {
     x: {
@@ -34,34 +62,12 @@ const options = {
     },
     y: {
       grid: {
-        display: false,
+        beginAtZero: true,
       },
+      beginAtZero: true,
+      suggestedMin: 0,
     },
   },
-};
-
-const data = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-  datasets: [
-    {
-      label: "Incomes",
-      data: [33, 53, 85, 41, 44, 65],
-      fill: true,
-      backgroundColor: "#20C997",
-      borderColor: "#20C997",
-      pointStyle: "circle",
-      pointRadius: 6,
-    },
-    {
-      label: "Expenses",
-      data: [40, 25, 35, 51, 54, 76],
-      fill: true,
-      backgroundColor: "#EB5757",
-      borderColor: "#EB5757",
-      pointStyle: "circle",
-      pointRadius: 6,
-    },
-  ],
 };
 
 ChartJS.register(
@@ -74,6 +80,57 @@ ChartJS.register(
   Legend
 );
 
-export default function LinearChart() {
-  return <Line data={data} options={options} className="h-full" />;
+export default function LinearChart({ data }: { data?: TransactionType[] }) {
+  console.log(data);
+
+  const chartData = useMemo(() => {
+    const income = Array(TIME_LABELS.length).fill(0);
+    const expense = Array(TIME_LABELS.length).fill(0);
+
+    data?.forEach((transaction) => {
+      const date = new Date(transaction.date);
+      const hour = date.getHours();
+      const index = Math.floor(hour / 3);
+
+      if (transaction.category === "expense") {
+        expense[index] += transaction.amount;
+      } else if (transaction.category === "income") {
+        income[index] += transaction.amount;
+      }
+    });
+
+    for (let i = 1; i < TIME_LABELS.length; i++) {
+      if (income[i] === 0) income[i] = income[i - 1];
+      if (expense[i] === 0) expense[i] = expense[i - 1];
+    }
+
+    return {
+      labels: TIME_LABELS,
+      datasets: [
+        {
+          label: "Income",
+          data: income,
+          fill: true,
+          backgroundColor: "rgba(32, 201, 151, 0.2)", // light green
+          borderColor: "#20C997",
+          borderWidth: 2,
+          pointRadius: 6,
+          order: 1,
+        },
+        {
+          label: "Expense",
+          data: expense,
+          fill: true,
+          backgroundColor: "rgba(235, 87, 87, 0.2)", // light red
+          borderColor: "#EB5757",
+          borderWidth: 2,
+          pointRadius: 6,
+          order: 2,
+        },
+      ],
+    };
+  }, [data]);
+  console.log(data);
+
+  return <Line data={chartData} options={options} className="h-full" />;
 }

@@ -11,6 +11,7 @@ import TableComponent from "./TableComponent";
 export default function TableTransactionsModal({
   children,
   classes,
+  onSuccess,
   data = [],
 }) {
   return (
@@ -24,7 +25,7 @@ export default function TableTransactionsModal({
           <DialogTitle>All Transactions</DialogTitle>
         </DialogHeader>
 
-        <TableComponent data={data} />
+        <TableComponent data={data} onSuccess={onSuccess} />
       </DialogContent>
     </Dialog>
   );

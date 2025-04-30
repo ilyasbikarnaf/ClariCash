@@ -15,12 +15,14 @@ import {
   subMonths,
 } from "date-fns";
 import { cn } from "@/lib/utils";
+import { type TransactionType } from "@/lib/types";
 
 type DateTableProps = {
   month: Date;
   setMonth: Dispatch<SetStateAction<Date>>;
   selectedDate: Date;
   setSelectedDate: Dispatch<SetStateAction<Date>>;
+  data: TransactionType[] | undefined;
 };
 
 export default function DateTable({
@@ -28,6 +30,7 @@ export default function DateTable({
   setMonth,
   selectedDate,
   setSelectedDate,
+  data,
 }: DateTableProps) {
   const days = useMemo(() => {
     const start = startOfWeek(startOfMonth(month), { weekStartsOn: 1 });
@@ -69,30 +72,57 @@ export default function DateTable({
         <div className="font-bold text-xs place-self-center">S</div>
         <div className="font-bold  text-xs place-self-center">S</div>
         {days.map((day) => {
+          const { income, expense } = data
+            ?.filter((transaction) => isSameDay(day, transaction.date))
+            .reduce(
+              (acc, transaction) => {
+                if (transaction.category === "expense") {
+                  acc.expense += transaction.amount;
+                } else if (transaction.category === "income") {
+                  acc.income += transaction.amount;
+                }
+
+                return acc;
+              },
+
+              { income: 0, expense: 0 }
+            ) || { income: 0, expense: 0 };
+
+          const total = income + expense;
+          const incomePercentage = total ? (income / total) * 100 : 0;
+          const expensePercentage = total ? (expense / total) * 100 : 0;
+
           return (
-            <div
-              className={cn(
-                " hover:cursor-pointer rounded p-1 w-full transition-all flex flex-col hover:bg-gray-600 items-center",
-                !isSameMonth(day, month) && "opacity-60",
-                isSameDay(day, selectedDate) && "bg-blue-500 text-white",
-                isSameDay(day, today) &&
-                  !isSameDay(day, selectedDate) &&
-                  "ring ring-white/20"
-              )}
-              key={day.getTime()}
-              onClick={() => setSelectedDate(day)}
-            >
-              <p
+            <div key={day.getTime()} className="w-6 lg:w-auto">
+              <div
                 className={cn(
-                  "font-semibold text-xs",
-                  !isSameMonth(day, month) && "text-gray-400"
+                  " hover:cursor-pointer rounded p-1 w-full transition-all flex flex-col hover:bg-gray-600 items-center",
+                  !isSameMonth(day, month) && "opacity-60",
+                  isSameDay(day, selectedDate) && "bg-purple-500 text-white",
+                  isSameDay(day, today) &&
+                    !isSameDay(day, selectedDate) &&
+                    "ring ring-white/20"
                 )}
+                onClick={() => setSelectedDate(day)}
               >
-                {getDate(day)}
-              </p>
-              <div className="w-full h-0.5 items-center flex text-xs">
-                <div className={`bg-green-500 w-[80%] h-full`}></div>
-                <div className={`bg-red-500 w-[20%] h-full`}></div>
+                <p
+                  className={cn(
+                    "font-semibold text-xs",
+                    !isSameMonth(day, month) && "text-gray-400"
+                  )}
+                >
+                  {getDate(day)}
+                </p>
+                <div className="w-full h-0.5 items-center flex text-xs">
+                  <div
+                    className={`bg-green-500  h-full`}
+                    style={{ width: `${incomePercentage}%` }}
+                  ></div>
+                  <div
+                    className={`bg-red-500 h-full`}
+                    style={{ width: `${expensePercentage}%` }}
+                  ></div>
+                </div>
               </div>
             </div>
           );

@@ -98,7 +98,7 @@ export default function CreateTransactionModal({
               id="date"
               defaultValue={now}
               type="datetime-local"
-              className="col-span-3"
+              className="col-span-3 [color-scheme:dark]"
             />
           </div>
 

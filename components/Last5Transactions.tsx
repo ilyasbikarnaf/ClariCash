@@ -14,7 +14,7 @@ export default function Last5Transactions({ isPending, data }) {
         >
           <div>
             <h2 className="text-xl">{transaction.name}</h2>
-            <p className="text-xs text-gray-300/80">
+            <p className="text-xs text-gray-400/70">
               {format(transaction.date, "MMMM dd, yyyy hh:mm a")}
             </p>
           </div>

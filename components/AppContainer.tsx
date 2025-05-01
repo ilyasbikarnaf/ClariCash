@@ -85,7 +85,7 @@ export default function AppContainer({
           <div className="bg-[#181818]/80 rounded-2xl backdrop-blur-xs w-[200px] place-content-center lg:w-full lg:p-2 max-w-full">
             <CircularChart income={income} expense={expense} />
           </div>
-          <div className="hidden lg:inline py-4 px-10 place-content-center  bg-[#181818]/80 rounded-2xl">
+          <div className="hidden lg:inline py-4 px-10 max-h-28 place-content-center bg-[#181818]/80 rounded-2xl">
             <h6>Total Balance</h6>
             <h2 className="text-3xl font-bold">
               ${totalBalance.toLocaleString()}

@@ -70,7 +70,7 @@ export default function CircularChart({
     <p className="text-center">Create a Transaction to display The Chart</p>
   ) : (
     <Doughnut
-      className="p-4 w-full lg:w-[300px]"
+      className="p-4 w-full lg:w-[300px] "
       data={data}
       options={options}
       plugins={[legendSpacingPlugin]}

@@ -63,7 +63,7 @@ export default function AppContainer({
 
   return (
     <div className={cn(classes)}>
-      <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-[1fr_minmax(auto,200px)] lg:grid-rows-[250px_1fr] lg:gap-5">
+      <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-[3fr_1fr] lg:grid-rows-[250px_1fr] lg:gap-5">
         <div className="lg:hidden flex flex-col">
           <h6>Your Total Balance</h6>
           <h2 className="text-4xl font-bold">
@@ -74,7 +74,7 @@ export default function AppContainer({
           <LinearChart data={selectedDateTransactions} />
         </div>
 
-        <div className="flex gap-3 lg:gap-y-5 lg:flex-col lg:grid lg:col-start-2 lg:col-end-3 lg:row-span-2">
+        <div className="flex gap-3 lg:grid lg:col-start-2 lg:col-end-3 lg:row-span-2 ">
           <DateTable
             month={month}
             setMonth={setMonth}
@@ -82,10 +82,10 @@ export default function AppContainer({
             setSelectedDate={setSelectedDate}
             data={data}
           />
-          <div className="bg-[#181818]/80 rounded-2xl backdrop-blur-xs w-[200px] place-content-center lg:w-full lg:p-2 max-w-full">
+          <div className="bg-[#181818]/80 rounded-2xl backdrop-blur-xs w-[200px] place-content-center lg:w-full lg:p-2 max-w-full lg:self-center lg:min-h-[300px]">
             <CircularChart income={income} expense={expense} />
           </div>
-          <div className="hidden lg:inline py-4 px-10 max-h-28 place-content-center bg-[#181818]/80 rounded-2xl">
+          <div className="hidden lg:inline py-4 px-10 max-h-28 place-content-center-safe bg-[#181818]/80 rounded-2xl">
             <h6>Total Balance</h6>
             <h2 className="text-3xl font-bold">
               ${totalBalance.toLocaleString()}

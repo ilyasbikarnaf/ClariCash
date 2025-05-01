@@ -2,6 +2,7 @@ import { Transaction, User } from "@/db/schema";
 import { getSession } from "./auth";
 import mongoose from "mongoose";
 import { cache } from "react";
+import { connectToDatabase } from "@/db/db";
 
 export const getCurrentUser = cache(async () => {
   const session = await getSession();
@@ -11,6 +12,7 @@ export const getCurrentUser = cache(async () => {
   }
 
   try {
+    await connectToDatabase();
     const user = await User.findOne(
       { _id: new mongoose.Types.ObjectId(session.userId) },
       { password: 0, __v: 0 }

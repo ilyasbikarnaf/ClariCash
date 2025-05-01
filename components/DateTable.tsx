@@ -42,7 +42,7 @@ export default function DateTable({
   const today = useMemo(() => new Date(), []);
 
   return (
-    <div className="flex flex-1 flex-col gap-y-3 py-2 px-2.5 sm:p-4 bg-[#181818]/90 lg:px-6 lg:py-3 place-content-center rounded-2xl lg:w-[300px] lg:max-h-[280px]">
+    <div className="flex flex-1 min-w-1/2 flex-col gap-y-3 py-2 px-2.5  sm:p-4 bg-[#181818]/90 lg:px-6 lg:py-3 place-content-center rounded-2xl lg:w-[300px] lg:max-h-[280px]">
       <div className="flex justify-between items-center">
         <div
           className="px-2 py-1 hover:bg-[#212121] rounded"

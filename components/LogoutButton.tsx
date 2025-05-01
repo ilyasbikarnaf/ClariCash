@@ -2,6 +2,7 @@
 
 import { logout } from "@/app/actions/auth";
 import { cn } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import toast from "react-hot-toast";
@@ -13,6 +14,7 @@ export default function LogoutButton({
 }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   function handleLogout() {
     startTransition(async () => {
@@ -25,6 +27,7 @@ export default function LogoutButton({
         }
 
         toast.success(signoutResult.message);
+        queryClient.invalidateQueries(["transactions"]);
         router.push("/signin");
       } catch (err) {
         console.log(err);

@@ -77,6 +77,7 @@ export async function getAllTransactions() {
     }
 
     const { id } = user;
+    console.log(id);
 
     const transactions = await Transaction.find({ userId: id }, { __v: 0 })
       .sort({

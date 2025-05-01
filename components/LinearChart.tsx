@@ -24,6 +24,17 @@ const TIME_LABELS = [
   "21:00",
 ];
 
+const legendSpacingPlugin = {
+  id: "legendSpacing",
+  beforeInit(chart) {
+    const origFit = chart.legend.fit;
+    chart.legend.fit = function () {
+      origFit.bind(this)();
+      this.height += 20; // add 20px under the legend
+    };
+  },
+};
+
 const options = {
   maintainAspectRatio: false,
   interaction: {
@@ -40,8 +51,8 @@ const options = {
         pointStyle: "circle",
         boxWidth: 6,
         boxHeight: 7,
-        padding: 20,
       },
+      margin: 20,
     },
     tooltip: {
       backgroundColor: "#",
@@ -49,7 +60,7 @@ const options = {
         label: function (context) {
           const label = context.dataset.label || "";
           const value = context.parsed.y;
-          return `${label}: $${value.toLocaleString()}`; // Adds $ and formats to 2 decimal places
+          return `${label}: $${value.toLocaleString()}`;
         },
       },
     },
@@ -63,6 +74,10 @@ const options = {
     y: {
       grid: {
         beginAtZero: true,
+      },
+      ticks: {
+        maxTicksLimit: 7,
+        padding: 5,
       },
       beginAtZero: true,
       suggestedMin: 0,
@@ -132,5 +147,12 @@ export default function LinearChart({ data }: { data?: TransactionType[] }) {
   }, [data]);
   console.log(data);
 
-  return <Line data={chartData} options={options} className="h-full" />;
+  return (
+    <Line
+      data={chartData}
+      options={options}
+      className="h-full"
+      plugins={[legendSpacingPlugin]}
+    />
+  );
 }

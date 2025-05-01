@@ -54,7 +54,7 @@ export default function RootLayout({
           <div>
             <Toaster />
           </div>
-          <main className="mx-auto max-w-md lg:max-w-2xl min-h-[90vh] pt-[5vh] md:pt-0 rounded-md p-2">
+          <main className="mx-auto max-w-md lg:max-w-2xl min-h-[90vh] pt-[5vh] my-8 lg:my-0  md:pt-0 rounded-md p-2">
             {children}
           </main>
         </Providers>

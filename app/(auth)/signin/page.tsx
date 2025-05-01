@@ -64,9 +64,9 @@ export default function Signin() {
   return (
     <div className="flex flex-col md:justify-center mt-10 min-h-screen  sm:px-6 lg:px-8 ">
       <div className="space-y-2 mb-10">
-        <h1 className="text-center text-3xl">FocusFlow</h1>
+        <h1 className="text-center text-3xl">ClariCash</h1>
         <h6 className="text-lg font-semibold text-center tracking-widest uppercase">
-          Plan. Track. Win.
+          Visualize. Budget. Succeed
         </h6>
       </div>
 
@@ -92,7 +92,7 @@ export default function Signin() {
           disabled={isPending}
           type="submit"
           className={clsx(
-            "hover:cursor-pointer bg-blue-500 p-2 rounded-md disabled:cursor-not-allowed disabled:opacity-75",
+            "hover:cursor-pointer bg-purple-500 p-2 rounded-2xl disabled:cursor-not-allowed disabled:opacity-75",
             isPending && "flex  justify-center gap-2 bg"
           )}
         >

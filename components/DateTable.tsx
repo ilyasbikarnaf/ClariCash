@@ -42,24 +42,28 @@ export default function DateTable({
   const today = useMemo(() => new Date(), []);
 
   return (
-    <div className="flex flex-1 flex-col gap-y-3 p-3 bg-[#181818]/90 lg:p-6 rounded-2xl lg:w-[300px]">
+    <div className="flex flex-1 flex-col gap-y-3 p-3 bg-[#181818]/90 lg:px-6 lg:py-3 place-content-center rounded-2xl lg:w-[300px]">
       <div className="flex justify-between items-center">
-        <div className="px-2 py-1 hover:bg-[#212121] rounded">
+        <div
+          className="px-2 py-1 hover:bg-[#212121] rounded"
+          onClick={() => setMonth(subMonths(month, 1))}
+        >
           <MoveLeftIcon
             size={20}
             className="hover:cursor-pointer hover:opacity-90"
-            onClick={() => setMonth(subMonths(month, 1))}
           />
         </div>
-        <h3 className="text-lg md:text-xl font-bold">
+        <h3 className="text-sm lg:text-xl font-bold">
           {format(month, "LLLL, y")}
         </h3>
 
-        <div className="hover:cursor-pointer hover:bg-[#212121] rounded px-2 py-1">
+        <div
+          className="hover:cursor-pointer hover:bg-[#212121] rounded px-2 py-1"
+          onClick={() => setMonth(addMonths(month, 1))}
+        >
           <MoveRightIcon
             size={20}
             className="hover:cursor-pointer hover:opacity-90"
-            onClick={() => setMonth(addMonths(month, 1))}
           />
         </div>
       </div>

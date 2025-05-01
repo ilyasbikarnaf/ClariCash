@@ -7,6 +7,8 @@ Chart.register(ArcElement, Legend);
 
 const options = {
   cutout: "70%",
+  // maintainAspectRatio: false,
+  responsive: true,
   plugins: {
     legend: {
       position: "top",
@@ -32,6 +34,17 @@ const options = {
   },
 };
 
+const legendSpacingPlugin = {
+  id: "legendSpacing",
+  beforeInit(chart) {
+    const origFit = chart.legend.fit;
+    chart.legend.fit = function fit() {
+      origFit.bind(this)();
+      this.height += 10; // ← add 20px under legend
+    };
+  },
+};
+
 export default function CircularChart({
   income,
   expense,
@@ -44,7 +57,6 @@ export default function CircularChart({
       labels: ["Income", "Expenses"],
       datasets: [
         {
-          // label: "Income vs Expenses",
           data: [income, expense],
           backgroundColor: ["#20C997", "#EB5757"],
           borderColor: "transparent",
@@ -54,5 +66,14 @@ export default function CircularChart({
     };
   }, [income, expense]);
 
-  return <Doughnut className="p-4 w-full" data={data} options={options} />;
+  return expense === 0 && income === 0 ? (
+    <p className="text-center">Create a Transaction to display The Chart</p>
+  ) : (
+    <Doughnut
+      className="p-4 w-full lg:w-[300px]"
+      data={data}
+      options={options}
+      plugins={[legendSpacingPlugin]}
+    />
+  );
 }

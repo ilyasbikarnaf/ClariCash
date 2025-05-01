@@ -14,11 +14,16 @@ export async function createTransaction(
   try {
     await connectToDatabase();
 
-    const { id } = await getCurrentUser();
-    if (!id) {
+    const user = await getCurrentUser();
+    if (!user) {
       console.log("no id provided");
-      return { message: "you must log in", success: false };
+      return {
+        message: "you must be logged in to create a transaction",
+        success: false,
+      };
     }
+
+    const { id } = user;
 
     const data = {
       name: formData.get("name") as string,
@@ -65,11 +70,13 @@ export async function getAllTransactions() {
   try {
     await connectToDatabase();
 
-    const { id } = await getCurrentUser();
-    if (!id) {
+    const user = await getCurrentUser();
+    if (!user) {
       console.log("no id provided");
-      return { message: "you must log in", success: false };
+      return [];
     }
+
+    const { id } = user;
 
     const transactions = await Transaction.find({ userId: id }, { __v: 0 })
       .sort({

@@ -30,7 +30,7 @@ export const getCurrentUser = cache(async () => {
 
 export async function getUserByEmail(email: string) {
   try {
-    const user = await User.findOne({ email }, { __v: 0, password: 0 });
+    const user = await User.findOne({ email }, { __v: 0 });
 
     if (!user) {
       return null;

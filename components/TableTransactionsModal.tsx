@@ -20,7 +20,7 @@ export default function TableTransactionsModal({
         <Button className={classes}>{children}</Button>
       </DialogTrigger>
 
-      <DialogContent className="md:min-w-[600px] lg:min-w-[800px] ">
+      <DialogContent className="md:min-w-[600px] lg:min-w-[800px] lg:ml-[50px] rounded-2xl ">
         <DialogHeader>
           <DialogTitle>All Transactions</DialogTitle>
         </DialogHeader>

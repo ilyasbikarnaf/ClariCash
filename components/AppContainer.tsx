@@ -14,7 +14,11 @@ import { cn, formatAbsoluteTime, formatRelativeTime } from "@/lib/utils";
 import Last5Transactions from "@/components/Last5Transactions";
 import TableTransactionsModal from "@/components/TableTransactionsModal";
 
-export default function AppContainer() {
+export default function AppContainer({
+  classes,
+}: {
+  classes?: string | boolean;
+}) {
   const [month, setMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -58,9 +62,9 @@ export default function AppContainer() {
   }
 
   return (
-    <>
+    <div className={cn(classes)}>
       <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-[1fr_minmax(auto,200px)] lg:grid-rows-[250px_1fr] lg:gap-5">
-        <div className="lg:hidden">
+        <div className="lg:hidden flex flex-col">
           <h6>Your Total Balance</h6>
           <h2 className="text-4xl font-bold">
             ${totalBalance.toLocaleString()}
@@ -78,7 +82,7 @@ export default function AppContainer() {
             setSelectedDate={setSelectedDate}
             data={data}
           />
-          <div className="bg-[#181818]/80 rounded-2xl backdrop-blur-xs w-[200px] place-content-center lg:w-full lg:p-2">
+          <div className="bg-[#181818]/80 rounded-2xl backdrop-blur-xs w-[200px] place-content-center lg:w-full lg:p-2 max-w-full">
             <CircularChart income={income} expense={expense} />
           </div>
           <div className="hidden lg:inline py-4 px-10 place-content-center  bg-[#181818]/80 rounded-2xl">
@@ -89,7 +93,7 @@ export default function AppContainer() {
           </div>
         </div>
 
-        <div className="bg-[#181818]/80 rounded-2xl p-6 backdrop-blur-xs flex flex-col gap-y-5">
+        <div className="bg-[#181818]/80 rounded-2xl p-6 backdrop-blur-xs flex flex-col gap-y-5 h-[470px]">
           <div className="flex justify-between items-center">
             <h4 className="font-semibold text-2xl">Last Transactions</h4>
             <div className="flex gap-2 items-center h-4">
@@ -130,6 +134,6 @@ export default function AppContainer() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

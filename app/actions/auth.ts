@@ -10,7 +10,6 @@ import {
 } from "@/lib/auth";
 import { getUserByEmail } from "@/lib/dal";
 import { SigninSchema, SignupSchema } from "@/lib/zodSchemas";
-import { redirect } from "next/navigation";
 
 export type ActionResponse = {
   success: boolean;
@@ -120,10 +119,15 @@ export async function signin(formData: FormData): Promise<ActionResponse> {
 export async function logout() {
   try {
     await deleteSession();
+    return {
+      message: "Signed out succesfully",
+      success: true,
+    };
   } catch (err) {
     console.log(err);
-    return null;
-  } finally {
-    redirect("/signin");
+    return {
+      message: "Failed to logout",
+      success: false,
+    };
   }
 }

@@ -51,7 +51,7 @@ export default function CreateTransactionModal({
       <DialogTrigger asChild ref={trigerRef}>
         <Button className={classes}>{children}</Button>
       </DialogTrigger>
-      <DialogContent className="sm:-w-[425px]">
+      <DialogContent className="sm:min-w-[425px] rounded-2xl lg:ml-[50px] ">
         <DialogHeader>
           <DialogTitle>All Transactions</DialogTitle>
           {/* <DialogDescription>

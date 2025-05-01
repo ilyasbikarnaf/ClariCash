@@ -6,5 +6,5 @@ export type TransactionType = {
   category: "income" | "expense";
   date: Date;
   createdAt: Date;
-  _id: String;
+  _id: string;
 };

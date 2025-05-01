@@ -34,7 +34,6 @@ export async function verifyJWT(token: string): Promise<JWTPayload | null> {
 
     return payload as JWTPayload;
   } catch (error) {
-    console.log("JWT verification failed:", error);
     return null;
   }
 }
@@ -56,7 +55,6 @@ export async function createSession(userId: string) {
 
     return true;
   } catch (error) {
-    console.log("Error creating cookie", error);
     return false;
   }
 }
@@ -102,7 +100,6 @@ export async function createUser(email: string, password: string) {
 
     return { _id: user._id };
   } catch (err) {
-    console.log("Error creating user", err);
     return null;
   }
 }

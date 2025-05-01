@@ -43,7 +43,6 @@ export default function Signup() {
         toast.success(result.message);
         router.push("/");
       } catch (err) {
-        console.log(err);
         toast.error("An unexpected error occured");
         return null;
       }

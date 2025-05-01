@@ -16,7 +16,6 @@ export async function createTransaction(
 
     const user = await getCurrentUser();
     if (!user) {
-      console.log("no id provided");
       return {
         message: "you must be logged in to create a transaction",
         success: false,
@@ -61,7 +60,6 @@ export async function createTransaction(
 
     return { message: "Transaction created succesfully", success: true };
   } catch (err) {
-    console.log(err);
     return { message: "An unexpected error occured", success: false };
   }
 }
@@ -72,12 +70,10 @@ export async function getAllTransactions() {
 
     const user = await getCurrentUser();
     if (!user) {
-      console.log("no id provided");
       return [];
     }
 
     const { id } = user;
-    console.log(id);
 
     const transactions = await Transaction.find({ userId: id }, { __v: 0 })
       .sort({
@@ -91,7 +87,7 @@ export async function getAllTransactions() {
       _id: transaction._id.toString(),
     })) as TransactionType[];
   } catch (err) {
-    console.log(err);
+    return [];
   }
 }
 
@@ -100,8 +96,6 @@ export async function deleteTransaction(
 ): Promise<ActionResponse> {
   try {
     await connectToDatabase();
-
-    console.log(transactionId);
 
     if (!isValidObjectId(transactionId)) {
       return { message: "Invalid transaction ID", success: false };
@@ -118,8 +112,6 @@ export async function deleteTransaction(
 
     return { message: "Transaction deleted Succesfully", success: true };
   } catch (err) {
-    console.log(err);
-
     return { message: "Failed to delete the Transaction", success: false };
   }
 }

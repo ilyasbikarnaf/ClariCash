@@ -17,7 +17,6 @@ export default function DeleteButton({ transactionId, onSuccess }) {
         onSuccess();
         return;
       } catch (err) {
-        console.log(err);
         toast.error("An error occured during deleting this transaction");
         return null;
       }

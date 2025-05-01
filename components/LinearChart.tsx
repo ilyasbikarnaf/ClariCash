@@ -96,8 +96,6 @@ ChartJS.register(
 );
 
 export default function LinearChart({ data }: { data?: TransactionType[] }) {
-  console.log(data);
-
   const chartData = useMemo(() => {
     const income = Array(TIME_LABELS.length).fill(0);
     const expense = Array(TIME_LABELS.length).fill(0);
@@ -145,7 +143,6 @@ export default function LinearChart({ data }: { data?: TransactionType[] }) {
       ],
     };
   }, [data]);
-  console.log(data);
 
   return (
     <Line

@@ -59,7 +59,6 @@ export async function signup(formData: FormData): Promise<ActionResponse> {
       success: true,
     };
   } catch (err) {
-    console.log(err.message);
     return { message: "An expected error occured", success: false };
   }
 }
@@ -124,7 +123,6 @@ export async function logout() {
       success: true,
     };
   } catch (err) {
-    console.log(err);
     return {
       message: "Failed to logout",
       success: false,

@@ -39,7 +39,6 @@ export default function CreateTransactionModal({
         await onSuccess();
         trigerRef.current?.click();
       } catch (err) {
-        console.log(err);
         toast.error("An unexpected error occured");
       }
     },

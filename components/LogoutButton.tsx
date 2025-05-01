@@ -30,7 +30,6 @@ export default function LogoutButton({
         queryClient.invalidateQueries(["transactions"]);
         router.push("/signin");
       } catch (err) {
-        console.log(err);
         toast.error("An unexpected error occured during logout");
       }
     });

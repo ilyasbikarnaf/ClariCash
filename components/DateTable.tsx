@@ -42,18 +42,22 @@ export default function DateTable({
   const today = useMemo(() => new Date(), []);
 
   return (
-    <div className="flex flex-1 flex-col gap-y-3 p-3 bg-[#181818]/90 lg:px-6 lg:py-3 place-content-center rounded-2xl lg:w-[300px] lg:max-h-[280px]">
+    <div className="flex flex-1 flex-col gap-y-3 py-2 px-2.5 sm:p-4 bg-[#181818]/90 lg:px-6 lg:py-3 place-content-center rounded-2xl lg:w-[300px] lg:max-h-[280px]">
       <div className="flex justify-between items-center">
         <div
           className="px-2 py-1 hover:bg-[#212121] rounded"
           onClick={() => setMonth(subMonths(month, 1))}
         >
           <MoveLeftIcon
+            size={15}
+            className="hover:cursor-pointer sm:hidden hover:opacity-90"
+          />
+          <MoveLeftIcon
             size={20}
-            className="hover:cursor-pointer hover:opacity-90"
+            className="hover:cursor-pointer hidden sm:inline hover:opacity-90"
           />
         </div>
-        <h3 className="text-sm lg:text-xl font-bold">
+        <h3 className="text-xs sm:text-[15px] lg:text-xl font-bold">
           {format(month, "LLLL, y")}
         </h3>
 
@@ -62,8 +66,12 @@ export default function DateTable({
           onClick={() => setMonth(addMonths(month, 1))}
         >
           <MoveRightIcon
+            size={15}
+            className="hover:cursor-pointer sm:hidden hover:opacity-90"
+          />
+          <MoveRightIcon
             size={20}
-            className="hover:cursor-pointer hover:opacity-90"
+            className="hover:cursor-pointer hidden sm:inline hover:opacity-90"
           />
         </div>
       </div>
@@ -97,7 +105,7 @@ export default function DateTable({
           const expensePercentage = total ? (expense / total) * 100 : 0;
 
           return (
-            <div key={day.getTime()} className="w-6 lg:w-auto">
+            <div key={day.getTime()} className="w-4 sm:w-6 lg:w-auto">
               <div
                 className={cn(
                   " hover:cursor-pointer rounded p-1 w-full transition-all flex flex-col hover:bg-gray-600 items-center",

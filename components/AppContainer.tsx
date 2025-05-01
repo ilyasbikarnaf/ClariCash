@@ -74,7 +74,7 @@ export default function AppContainer({
           <LinearChart data={selectedDateTransactions} />
         </div>
 
-        <div className="flex gap-3 lg:grid lg:col-start-2 lg:col-end-3 lg:row-span-2 ">
+        <div className="flex flex-1 gap-3 lg:grid lg:col-start-2 lg:col-end-3 lg:row-span-2 ">
           <DateTable
             month={month}
             setMonth={setMonth}
@@ -93,9 +93,11 @@ export default function AppContainer({
           </div>
         </div>
 
-        <div className="bg-[#181818]/80 rounded-2xl p-6 backdrop-blur-xs flex flex-col gap-y-5 h-[470px]">
+        <div className="bg-[#181818]/80 rounded-2xl p-3 md:p-6 backdrop-blur-xs flex flex-col gap-y-5 h-[470px]">
           <div className="flex justify-between items-center">
-            <h4 className="font-semibold text-2xl">Last Transactions</h4>
+            <h4 className="font-semibold lg:text-2xl sm:text-xl text-lg ">
+              Last Transactions
+            </h4>
             <div className="flex gap-2 items-center h-4">
               <TableTransactionsModal
                 onSuccess={onSuccess}
@@ -115,7 +117,9 @@ export default function AppContainer({
               >
                 <>
                   <Eye size={16} />
-                  <span className="text-sm font-semibold">View All</span>
+                  <span className="text-xs sm:text-sm font-semibold">
+                    View All
+                  </span>
                 </>
               </TableTransactionsModal>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/react";
 import {
   BottomWave,
   BottomWaveMobile,
@@ -56,6 +57,7 @@ export default function RootLayout({
           </div>
           <main className="mx-auto max-w-md lg:max-w-2xl min-h-[90vh] pt-[5vh] my-8 lg:my-0  md:pt-0 rounded-md p-2">
             {children}
+            <Analytics />
           </main>
         </Providers>
       </body>

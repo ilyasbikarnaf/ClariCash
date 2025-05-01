@@ -1,5 +1,3 @@
-import { getLast5Transactions } from "@/app/actions/transaction";
-import { useQuery } from "@tanstack/react-query";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -16,7 +14,7 @@ export default function Last5Transactions({ isPending, data }) {
         >
           <div>
             <h2 className="text-xl">{transaction.name}</h2>
-            <p className="text-xs text-gray-700">
+            <p className="text-xs text-gray-300/80">
               {format(transaction.date, "MMMM dd, yyyy hh:mm a")}
             </p>
           </div>

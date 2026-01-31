@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { startTransition, useActionState } from "react";
+import { startTransition, useActionState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -19,41 +19,36 @@ const initialState = {
 };
 
 export default function Signup() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(SignupSchema),
+    mode: "onBlur", // Optional: validates fields when you leave them
   });
 
-  const router = useRouter();
+  const [state, formAction, isPending] = useActionState(signup, initialState);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [state, formAction, isPending] = useActionState(
-    async (prevData, data: FormData) => {
-      try {
-        const result = await signup(data);
-
-        if (!result.success) {
-          toast.error(result.message);
-          return null;
-        }
-
-        toast.success(result.message);
-        router.replace("/");
+  useEffect(() => {
+    if (state.message) {
+      if (state.success) {
+        toast.success(state.message);
         router.refresh();
-      } catch (err) {
-        toast.error("An unexpected error occured");
-        return null;
+        router.replace("/");
+      } else {
+        toast.error(state.message);
       }
-    },
-    initialState
-  );
+    }
+  }, [state, router]);
 
   const onSubmit = async (data: z.output<typeof SignupSchema>) => {
-    const formData = new FormData();
+    // Debugging: If this log appears, validation passed. If not, check form fields.
+    console.log("Submitting form data:", data);
 
+    const formData = new FormData();
     formData.append("email", data.email);
     formData.append("password", data.password);
     formData.append("confirmPassword", data.confirmPassword);
@@ -63,57 +58,67 @@ export default function Signup() {
     });
   };
 
+  // Debugging: Monitor errors to see why onSubmit might be blocked
+  console.log("Form Errors:", errors);
+
   return (
-    <div className="flex flex-col md:justify-center mt-10 min-h-screen  sm:px-6 lg:px-8 ">
+    <div className="flex flex-col md:justify-center mt-10 min-h-screen sm:px-6 lg:px-8">
       <div className="space-y-2 mb-10">
         <h1 className="text-center text-3xl">ClariCash</h1>
         <h6 className="text-lg font-semibold text-center tracking-widest uppercase">
-          Visualize. Budget. Succeed
+          Create Account
         </h6>
       </div>
 
       <form
-        className="flex flex-col sm:mx-auto sm:max-w-md sm:w-full bg-[#1A1A1A] p-8 border-1 border-[#444444]/30   rounded space-y-7"
+        className="flex flex-col sm:mx-auto sm:max-w-md sm:w-full bg-[#1A1A1A] p-8 border-1 border-[#444444]/30 rounded space-y-7"
         onSubmit={handleSubmit(onSubmit)}
       >
         <FormInput
+          name="email" // EXPLICIT NAME MATCHING ZOD SCHEMA
           type="email"
           errors={errors}
           register={register}
           labelText="Email"
         />
+
         <FormInput
+          name="password" // EXPLICIT NAME MATCHING ZOD SCHEMA
           type="password"
           errors={errors}
           register={register}
           labelText="Password"
         />
+
         <FormInput
-          type="confirmPassword"
+          name="confirmPassword" // CRITICAL FIX: Explicitly maps to Zod's confirmPassword
+          type="password" // CRITICAL FIX: Correct HTML input type
           errors={errors}
           register={register}
           labelText="Confirm Password"
         />
+
         <button
           disabled={isPending}
           type="submit"
           className={clsx(
-            "hover:cursor-pointer bg-purple-500 p-2 rounded-2xl disabled:cursor-not-allowed disabled:opacity-75",
-            isPending && "flex  justify-center gap-2 bg"
+            "hover:cursor-pointer bg-purple-500 p-2 rounded-2xl disabled:cursor-not-allowed disabled:opacity-75 transition-all w-full", // Added w-full for better UX
+            isPending && "flex justify-center gap-2 items-center",
           )}
         >
           {isPending ? (
             <>
               <LoadingSpinner />
-              Loading...
+              Creating Account...
             </>
           ) : (
             "Sign up"
           )}
         </button>
+
         <p className="text-white/50 text-center">
           Already have an account? &nbsp;
-          <Link className="text-white" href="/signin">
+          <Link className="text-white hover:underline" href="/signin">
             Sign in
           </Link>
         </p>

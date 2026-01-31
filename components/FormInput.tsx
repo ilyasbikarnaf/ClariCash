@@ -1,40 +1,38 @@
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 
-type FormInputProps = {
+interface FormInputProps {
   labelText: string;
-  type: "email" | "password" | "confirmPassword";
-  errors: FieldErrors<{
-    email: string;
-    password: string;
-    confirmPassword: string;
-  }>;
-  register: UseFormRegister<{
-    email: string;
-    password: string;
-    confirmPassword?: string;
-  }>;
-};
+  type: string;
+  register: UseFormRegister<any>;
+  errors: FieldErrors;
+  name?: string; // Make sure this prop exists
+}
+
 export default function FormInput({
-  register,
   labelText,
   type,
+  register,
   errors,
+  name, // Destructure name
 }: FormInputProps) {
+  // If name is provided, use it. Otherwise fallback to labelText (risky!)
+  const registrationName = name || labelText;
+
   return (
-    <div className="flex flex-col gap-2 ">
-      <label htmlFor={type} className="opacity text-md ml-1">
-        {labelText}
-      </label>
+    <div className="flex flex-col gap-2">
+      <label className="text-white">{labelText}</label>
       <input
-        {...register(type)}
-        type={type === "confirmPassword" ? "password" : type}
-        name={type}
-        id={type}
-        className="h-10 w-full rounded-[8px] border border-gray-300/10 bg-[#222222] px-3 py-2 text-md placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 "
+        type={type}
+        // This links the input to React Hook Form
+        {...register(registrationName)}
+        className="p-2 rounded bg-[#333] text-white border border-[#444]"
       />
 
-      {errors[type] && (
-        <p className="text-red-500 text-sm">{errors[type].message}</p>
+      {/* Dynamic Error Message Display */}
+      {errors[registrationName] && (
+        <span className="text-red-500 text-sm">
+          {errors[registrationName]?.message as string}
+        </span>
       )}
     </div>
   );

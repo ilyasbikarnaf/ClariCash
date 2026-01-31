@@ -9,7 +9,7 @@ import { isValidObjectId } from "mongoose";
 import { getCurrentUser } from "@/lib/dal";
 
 export async function createTransaction(
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionResponse> {
   try {
     await connectToDatabase();
@@ -82,6 +82,8 @@ export async function getAllTransactions() {
       })
       .lean();
 
+    console.log(transactions);
+
     return transactions.map((transaction) => ({
       ...transaction,
       _id: transaction._id.toString(),
@@ -92,7 +94,7 @@ export async function getAllTransactions() {
 }
 
 export async function deleteTransaction(
-  transactionId: string | number
+  transactionId: string | number,
 ): Promise<ActionResponse> {
   try {
     await connectToDatabase();

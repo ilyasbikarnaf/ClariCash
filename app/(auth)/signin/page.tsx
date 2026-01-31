@@ -4,12 +4,11 @@ import { signin } from "@/app/actions/auth";
 import FormInput from "@/components/FormInput";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { SigninSchema } from "@/lib/zodSchemas";
-// import { useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { startTransition, useActionState, useTransition } from "react";
+import { startTransition, useActionState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -20,6 +19,8 @@ const initialState = {
 };
 
 export default function Signin() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -28,41 +29,34 @@ export default function Signin() {
     resolver: zodResolver(SigninSchema),
   });
 
-  const router = useRouter();
+  // 1. Pass the Server Action directly to useActionState
+  const [state, formAction, isPending] = useActionState(signin, initialState);
 
-  const [state, formAction, isPending] = useActionState(
-    async (prevData, formData: FormData) => {
-      try {
-        const result = await signin(formData);
-
-        if (!result.success) {
-          toast.error(result.message);
-          return null;
-        }
-
-        toast.success(result.message);
+  // 2. Handle Side Effects (Toast & Redirect) in useEffect
+  useEffect(() => {
+    if (state.message) {
+      if (state.success) {
+        toast.success(state.message);
+        router.refresh(); // Ensure server components update with new cookie
         router.replace("/");
-        router.refresh();
-      } catch (err) {
-        toast.error("An unexpected error occured");
-        return null;
+      } else {
+        toast.error(state.message);
       }
-    },
-    initialState
-  );
+    }
+  }, [state, router]);
 
   function onSubmit(data: z.output<typeof SigninSchema>) {
     const formData = new FormData();
     formData.append("email", data.email);
     formData.append("password", data.password);
 
-    startTransition(async () => {
+    startTransition(() => {
       formAction(formData);
     });
   }
 
   return (
-    <div className="flex flex-col md:justify-center mt-10 min-h-screen  sm:px-6 lg:px-8 ">
+    <div className="flex flex-col md:justify-center mt-10 min-h-screen sm:px-6 lg:px-8">
       <div className="space-y-2 mb-10">
         <h1 className="text-center text-3xl">ClariCash</h1>
         <h6 className="text-lg font-semibold text-center tracking-widest uppercase">
@@ -71,7 +65,7 @@ export default function Signin() {
       </div>
 
       <form
-        className="flex flex-col sm:mx-auto sm:max-w-md sm:w-full bg-[#1A1A1A] p-8 border-1 border-[#444444]/30   rounded space-y-7"
+        className="flex flex-col sm:mx-auto sm:max-w-md sm:w-full bg-[#1A1A1A] p-8 border-1 border-[#444444]/30 rounded space-y-7"
         onSubmit={handleSubmit(onSubmit)}
       >
         <FormInput
@@ -92,8 +86,8 @@ export default function Signin() {
           disabled={isPending}
           type="submit"
           className={clsx(
-            "hover:cursor-pointer bg-purple-500 p-2 rounded-2xl disabled:cursor-not-allowed disabled:opacity-75",
-            isPending && "flex  justify-center gap-2 bg"
+            "hover:cursor-pointer bg-purple-500 p-2 rounded-2xl disabled:cursor-not-allowed disabled:opacity-75 transition-all",
+            isPending && "flex justify-center gap-2",
           )}
         >
           {isPending ? (
@@ -108,7 +102,7 @@ export default function Signin() {
 
         <p className="text-white/50 text-center">
           Don't have an account? &nbsp;
-          <Link className="text-white" href="/signup">
+          <Link className="text-white hover:underline" href="/signup">
             Sign up
           </Link>
         </p>

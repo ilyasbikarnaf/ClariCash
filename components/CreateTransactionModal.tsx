@@ -42,7 +42,7 @@ export default function CreateTransactionModal({
         toast.error("An unexpected error occured");
       }
     },
-    { success: false, message: "" }
+    { success: false, message: "" },
   );
 
   return (
@@ -53,9 +53,6 @@ export default function CreateTransactionModal({
       <DialogContent className="sm:min-w-[425px] rounded-2xl lg:ml-[50px] ">
         <DialogHeader>
           <DialogTitle>All Transactions</DialogTitle>
-          {/* <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription> */}
         </DialogHeader>
         <form className="grid gap-4 py-4" action={formAction}>
           <div className="grid grid-cols-4 items-center gap-4">

@@ -32,7 +32,7 @@ export default function AppContainer({
 
   const selectedDateTransactions = useMemo(() => {
     return data?.filter((transaction) =>
-      isSameDay(selectedDate, transaction.date)
+      isSameDay(selectedDate, transaction.date),
     );
   }, [data, selectedDate]);
 
@@ -49,7 +49,7 @@ export default function AppContainer({
         return acc;
       },
 
-      { income: 0, expense: 0 }
+      { income: 0, expense: 0 },
     ) || { income: 0, expense: 0 };
 
     const totalBalance = income - expense;

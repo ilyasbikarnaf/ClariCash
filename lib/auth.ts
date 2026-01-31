@@ -10,6 +10,11 @@ type JWTPayload = {
 
 const JWT_EXPIRATION = "7d";
 
+// Safety check to ensure secret exists
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET is not defined in environment variables");
+}
+
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function hashPassword(password: string) {
@@ -31,7 +36,6 @@ export async function generateJWT(payload: JWTPayload) {
 export async function verifyJWT(token: string): Promise<JWTPayload | null> {
   try {
     const { payload } = await jose.jwtVerify(token, JWT_SECRET);
-
     return payload as JWTPayload;
   } catch (error) {
     return null;
@@ -39,24 +43,21 @@ export async function verifyJWT(token: string): Promise<JWTPayload | null> {
 }
 
 export async function createSession(userId: string) {
-  try {
-    const token = await generateJWT({ userId });
+  // CRITICAL FIX: Removed try/catch. If this fails, we WANT it to throw
+  // so the user is not redirected without a cookie.
+  const token = await generateJWT({ userId });
 
-    const cookieStore = await cookies();
-    cookieStore.set({
-      name: "auth_token",
-      value: token,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 * 7,
-      path: "/",
-      sameSite: "lax",
-    });
+  const cookieStore = await cookies();
 
-    return true;
-  } catch (error) {
-    return false;
-  }
+  cookieStore.set({
+    name: "auth_token",
+    value: token,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 60 * 60 * 24 * 7,
+    path: "/",
+    sameSite: "lax",
+  });
 }
 
 export async function getSession() {
@@ -72,17 +73,7 @@ export async function getSession() {
 
     return payload ? { userId: payload.userId } : null;
   } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message.includes("During prerendering, `cookies()` rejects")
-    ) {
-      console.log(
-        "Cookies not available during prerendering, returning null session"
-      );
-      return null;
-    }
-
-    console.error("Error getting session:", error);
+    // Handle Next.js prerendering edge case
     return null;
   }
 }
@@ -97,9 +88,9 @@ export async function createUser(email: string, password: string) {
 
   try {
     const user = await User.create({ email, password: hashedPassword });
-
     return { _id: user._id };
   } catch (err) {
+    console.error("Create User Error:", err);
     return null;
   }
 }

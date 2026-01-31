@@ -97,7 +97,7 @@ export default function DateTable({
                 return acc;
               },
 
-              { income: 0, expense: 0 }
+              { income: 0, expense: 0 },
             ) || { income: 0, expense: 0 };
 
           const total = income + expense;
@@ -113,14 +113,14 @@ export default function DateTable({
                   isSameDay(day, selectedDate) && "bg-purple-500 text-white",
                   isSameDay(day, today) &&
                     !isSameDay(day, selectedDate) &&
-                    "ring ring-white/20"
+                    "ring ring-white/20",
                 )}
                 onClick={() => setSelectedDate(day)}
               >
                 <p
                   className={cn(
                     "font-semibold text-xs",
-                    !isSameMonth(day, month) && "text-gray-400"
+                    !isSameMonth(day, month) && "text-gray-400",
                   )}
                 >
                   {getDate(day)}
